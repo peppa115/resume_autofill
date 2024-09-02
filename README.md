@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # resume-autofill
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -36,4 +35,3 @@ npm run lint
 ```
 =======
 # resume_autofill
->>>>>>> 537d81c88d177752108cb33f4592408cc507a746
