@@ -32,7 +32,7 @@ const navigatorBarArr = [
     path: '/personal',
   },
 ]
-const activeIndex = ref('1')
+const activeIndex = ref('0')
 const activeIndex2 = ref('1')
 const handleSelect = (key, keyPath) => {
   router.push(navigatorBarArr[key])

@@ -21,7 +21,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import  NavigatorBar from './components/NavigatorBar.vue'
-import LoginModel from './components/loginModel.vue'
+import LoginModel from './components/login/loginModel.vue'
 import { ref } from 'vue'
 
 const isShowLogin = ref(false)
