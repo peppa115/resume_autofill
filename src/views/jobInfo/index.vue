@@ -2,21 +2,95 @@
   <div class="job-wrap">
     <el-container class="job-container">
       <el-main>
-        <h3>岗位信息</h3>
-        <div class="job-item" v-for="(item, index) in [1,2,3,4,5]" :key="index">
-          岗位信息{{ item }}
+        <h2 class="text-2xl">岗位信息</h2>
+        <div class="flex flex-wrap gap-4 items-center my-5">
+          <el-select
+            v-model="selectValue"
+            placeholder="校招/社招/实习"
+            size="large"
+            style="width: 240px"
+          >
+            <el-option
+              v-for="item in selectOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-cascader
+            v-model="cascaderValue"
+            :options="industryOptions"
+            :props="props"
+            placeholder="全部岗位"
+            size="large"
+          />
+          <el-select
+            v-model="selectValue"
+            placeholder="全部城市"
+            size="large"
+            style="width: 240px"
+          >
+            <el-option
+              v-for="item in selectOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </div>
+        <div class="min-h-screen py-4">
+        <div class="container mx-auto">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div
+              v-for="(job, index) in jobList"
+              :key="index"
+              class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
+            >
+              <h2 class="text-xl font-semibold text-gray-800">{{ job.title }}</h2>
+              <p class="text-gray-600 mt-2">公司：{{ job.company }}</p>
+              <p class="text-gray-600 mt-1">城市：{{ job.city }}</p>
+              <p class="text-gray-600 mt-1">行业：{{ job.industry }}</p>
+              <p class="text-gray-800 font-bold mt-4">工资：{{ job.salary }}</p>
+
+              <!-- 岗位职责 -->
+              <div class="mt-4">
+                <h3 class="text-gray-800 font-medium">岗位职责：</h3>
+                <ul class="list-disc list-inside text-gray-600 mt-2">
+                  <li v-for="(duty, idx) in job.responsibilities" :key="idx">
+                    {{ duty }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+
       </el-main>
-      <el-aside class="aside-wrap">
-        <h3>信息栏</h3>
-        <div class="info-block">今天是个好日子</div>
-      </el-aside>
     </el-container>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
+import { cascaderOptions, selectOptions, jobList, industryOptions } from '../../lib/test'
+console.log("%c Line:81 🍆 jobList", "color:#4fff4B", jobList);
+
+const jobTypeOptions = [
+  '校招',
+  '实习',
+  '社招',
+]
+
+let selectValue = ref()
+let cascaderValue = ref()
+
+const props = {
+  expandTrigger: 'hover' as const,
+}
+
+cascaderOptions
+
 
 
 </script>
@@ -32,7 +106,6 @@ import { ref } from 'vue';
       width: 100%;
       height: 100px;
       margin-bottom: 20px;
-      border: 1px solid green;
       box-sizing: border-box;
     }
     .aside-wrap {
