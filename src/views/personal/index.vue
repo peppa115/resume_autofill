@@ -25,7 +25,9 @@
           <!-- 邮箱 -->
           <div>
             <p class="text-sm text-gray-500">电子邮箱</p>
-            <p class="text-lg font-medium text-gray-800">{{ user.email }}</p>
+            <p class="text-lg font-medium text-gray-800">
+              {{ user.mail_address }}
+            </p>
           </div>
 
           <!-- 联系电话 -->
@@ -45,16 +47,40 @@
   </div>
 </template>
 <script>
+import { getUserInfo } from "@/service/api/userService";
+import { ElMessage } from "element-plus";
+import { onBeforeMount, ref } from "vue";
+
 export default {
   setup() {
-    const user = {
-      name: "张三",
-      gender: "男",
-      birthday: "1995-03-15",
-      email: "zhangsan@example.com",
-      phone: "13812345678",
-      address: "北京市海淀区中关村大街1号",
+    const init = async () => {
+      getUserData();
     };
+    onBeforeMount(() => {
+      init();
+    });
+    const getUserData = async () => {
+      const res = await getUserInfo({
+        sid: window.localStorage.getItem("token"),
+      });
+      if (res.info.code !== 1) {
+        return ElMessage.error("try again later");
+      }
+      user.value = res.info.account_info;
+
+      console.log("%c Line:66 🍿", "color:#7f2b82", res);
+    };
+
+    const user = ref({});
+
+    // const user = {
+    //   name: "张三",
+    //   gender: "男",
+    //   birthday: "1995-03-15",
+    //   email: "zhangsan@example.com",
+    //   phone: "13812345678",
+    //   address: "北京市海淀区中关村大街1号",
+    // };
 
     return {
       user,

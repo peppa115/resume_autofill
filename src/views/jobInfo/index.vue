@@ -39,66 +39,75 @@
           </el-select>
         </div>
         <div class="min-h-screen py-4">
-        <div class="container mx-auto">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div
-              v-for="(job, index) in jobList"
-              :key="index"
-              class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
-            >
-              <h2 class="text-xl font-semibold text-gray-800">{{ job.title }}</h2>
-              <p class="text-gray-600 mt-2">公司：{{ job.company }}</p>
-              <p class="text-gray-600 mt-1">城市：{{ job.city }}</p>
-              <p class="text-gray-600 mt-1">行业：{{ job.industry }}</p>
-              <p class="text-gray-800 font-bold mt-4">工资：{{ job.salary }}</p>
-
-              <!-- 岗位职责 -->
-              <div class="mt-4">
-                <h3 class="text-gray-800 font-medium">岗位职责：</h3>
-                <ul class="list-disc list-inside text-gray-600 mt-2">
-                  <li v-for="(duty, idx) in job.responsibilities" :key="idx">
-                    {{ duty }}
-                  </li>
-                </ul>
+          <div class="container mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div
+                v-for="(job, index) in jobInfoList"
+                :key="index"
+                class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
+              >
+                <h2 class="text-xl font-semibold text-gray-800">
+                  {{ job.post_name }}
+                </h2>
+                <!-- <p class="text-gray-600 mt-2">公司：{{ job.company }}</p> -->
+                <p class="text-gray-600 mt-1">城市：{{ job.city }}</p>
+                <p class="text-gray-600 mt-1">行业：{{ job.industry }}</p>
+                <!-- <p class="text-gray-800 font-bold mt-4">
+                  工资：{{ job.salary }}
+                </p> -->
+                <!-- 岗位职责 -->
+                <div class="mt-4 whitespace-pre-line">
+                  {{ job.post_info }}
+                  <!-- <h3 class="text-gray-800 font-medium">岗位职责：</h3>
+                  <ul class="list-disc list-inside text-gray-600 mt-2">
+                    <li v-for="(duty, idx) in job.responsibilities" :key="idx">
+                      {{ duty }}
+                    </li>
+                  </ul> -->
+                </div>
               </div>
             </div>
           </div>
         </div>
-  </div>
-
       </el-main>
     </el-container>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import { cascaderOptions, selectOptions, jobList, industryOptions } from '../../lib/test'
-console.log("%c Line:81 🍆 jobList", "color:#4fff4B", jobList);
+<script setup>
+import { onBeforeMount, ref } from "vue";
+import { selectOptions, industryOptions } from "../../lib/test";
+import { getResume } from "@/service/api/jobService";
+import { ElMessage } from "element-plus";
 
-const jobTypeOptions = [
-  '校招',
-  '实习',
-  '社招',
-]
-
-let selectValue = ref()
-let cascaderValue = ref()
+let selectValue = ref();
+let cascaderValue = ref();
 
 const props = {
-  expandTrigger: 'hover' as const,
-}
+  expandTrigger: "hover",
+};
 
-cascaderOptions
-
-
-
+onBeforeMount(() => {
+  init();
+});
+const jobInfoList = ref([]);
+const init = async () => {
+  const res = await getResume();
+  console.log("%c Line:99 🍤 res", "color:#42b983", res, res.info.posts[0]);
+  if (res.info.code !== 1) {
+    return ElMessage.error("try again later");
+  }
+  jobInfoList.value = res.info.posts;
+};
+</script>
+<script>
+export default {
+  name: "job-info",
+};
 </script>
 
 <style lang="scss" scoped>
-
 .job-wrap {
-
   .job-container {
     margin: 0 auto;
     width: 75vw;
@@ -116,8 +125,6 @@ cascaderOptions
       height: 180px;
       border: 1px solid blueviolet;
     }
-
   }
 }
-
 </style>

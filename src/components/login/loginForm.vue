@@ -4,34 +4,62 @@
     <!-- 登录注册表单 -->
     <div class="form-warp">
       <div class="form-title">邮箱名</div>
-      <input v-model="username" placeholder="邮箱" class="input-block"/>
+      <input v-model="username" placeholder="邮箱" class="input-block" />
       <div class="form-title">密码</div>
-      <input v-model="password" type="password" placeholder="密码" class="input-block"/>
+      <input
+        v-model="password"
+        type="password"
+        placeholder="密码"
+        class="input-block"
+      />
     </div>
-    <div class="submit-btn">登录</div>
+    <div class="submit-btn" @click="goLogin">登录</div>
     <div class="forget-info">忘记密码？</div>
     <div class="close-btn" @click="closeModal">关闭</div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const emit = defineEmits(['closeModal'])
+import { login } from "@/service/api/userService";
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
+const emit = defineEmits(["closeModal"]);
 
 const closeModal = () => {
-  emit('closeModal')
-}
+  emit("closeModal");
+};
+let username = ref("");
+let password = ref("");
 
-
+const goLogin = async () => {
+  if (username.value.length === 0 || password.value.length === 0) {
+    alert("need username and password");
+    return;
+  }
+  const res = await login({
+    mail_address: username.value,
+    password: password.value,
+  });
+  if (res.info.code === 1) {
+    window.localStorage.setItem("token", res.info.sid);
+    ElMessage({
+      message: "登录成功",
+      type: "success",
+    });
+    closeModal();
+  } else {
+    ElMessage.error("登录失败，请稍后重试");
+  }
+  console.log("%c Line:34 🥚 res", "color:#3f7cff", res);
+};
 </script>
 
-<style scoped lang="scss"> 
+<style scoped lang="scss">
 .login-form {
   .form-warp {
     display: flex;
     flex-direction: column;
     text-align: left;
-    
   }
   .input-block {
     display: block;
@@ -71,8 +99,5 @@ const closeModal = () => {
     bottom: 40px;
     cursor: pointer;
   }
-
-
 }
-
 </style>

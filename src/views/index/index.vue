@@ -55,8 +55,11 @@
     </footer>
   </div>
 </template>
-<script>
-export default {
-  name: "HomePage",
-};
+<script setup>
+// import { getProductList } from '@/service/api/userService';
+
+// const res = await getProductList()
+// console.log("%c Line:62 🌶 res", "color:#4fff4B", res);
+
+
 </script>
