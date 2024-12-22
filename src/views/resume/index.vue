@@ -5,7 +5,9 @@
     <el-container>
       <el-aside width="200px">
         <div v-for="(item, key) in resumeList" v-bind:key="key">
-          <div @click="getTargetResume(item)">{{ item }}</div>
+          <div @click="getTargetResume(item.resume_id)">
+            {{ item.resume_name }}
+          </div>
         </div>
       </el-aside>
       <el-main>
@@ -526,7 +528,7 @@ const getResumeListData = async () => {
   if (res.info.code !== 1) {
     return ElMessage.error("try again later");
   }
-  resumeList.value = res.info.resume_id_list;
+  resumeList.value = res.info.resume_list;
 };
 const getTargetResume = async (id) => {
   const res = await getResume({
